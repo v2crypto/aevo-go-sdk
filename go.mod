@@ -1,4 +1,4 @@
-module github.com/gogapopp/aevo-go-sdk
+module github.com/v2crypto/aevo-go-sdk
 
 go 1.21.0
 

@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/gogapopp/aevo-go-sdk/aevo"
 	"github.com/joho/godotenv"
+	"github.com/v2crypto/aevo-go-sdk/aevo"
 )
 
 func ExamplePublicAPI() {

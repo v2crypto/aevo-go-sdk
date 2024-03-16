@@ -20,7 +20,7 @@ import (
 	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/signer/core/apitypes"
-	"github.com/gogapopp/aevo-go-sdk/models"
+	"github.com/v2crypto/aevo-go-sdk/models"
 )
 
 func generateSalt() int {

@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gogapopp/aevo-go-sdk/models"
+	"github.com/v2crypto/aevo-go-sdk/models"
 )
 
 // GetAssets returns the list of active underlying assets

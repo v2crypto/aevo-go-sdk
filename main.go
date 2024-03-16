@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/gogapopp/aevo-go-sdk/aevo"
-	"github.com/gogapopp/aevo-go-sdk/models"
 	"github.com/joho/godotenv"
+	"github.com/v2crypto/aevo-go-sdk/aevo"
+	"github.com/v2crypto/aevo-go-sdk/models"
 )
 
 func main() {

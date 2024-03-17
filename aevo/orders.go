@@ -16,6 +16,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -52,10 +53,10 @@ func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ([]byte, error
 	order.Timestamp = time.Now().Unix()
 	order.Salt = int64(generateSalt())
 	// check signing key
-	if c.signingKey == nil {
-		return nil, fmt.Errorf("signing key is not provided")
-	}
-	order.Maker = crypto.PubkeyToAddress(c.signingKey.PublicKey)
+	// if c.signingKey == nil {
+	// 	return nil, fmt.Errorf("signing key is not provided")
+	// }
+	order.Maker = common.HexToAddress(c.address[2:])
 
 	types := apitypes.Types{
 		"EIP712Domain": {
@@ -73,6 +74,7 @@ func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ([]byte, error
 			{Name: "salt", Type: "uint256"},
 			{Name: "instrument", Type: "uint256"},
 			{Name: "timestamp", Type: "uint256"},
+			{Name: "postOnly", Type: "bool"},
 		},
 	}
 	// privateKeys, err := crypto.HexToECDSA(os.Getenv("SIGNING_KEY"))
@@ -81,9 +83,9 @@ func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ([]byte, error
 	// }
 	// name='Aevo Testnet', version='1', chainId=11155111
 	// name='Aevo Mainnet', version='1', chainId=1
-	chainID := math.NewHexOrDecimal256(11155111)
+	chainID := math.NewHexOrDecimal256(1)
 	domain := apitypes.TypedDataDomain{
-		Name:    "Aevo Testnet",
+		Name:    "Aevo Mainnet",
 		ChainId: chainID,
 		Version: "1",
 		// Salt:    hexutil.Encode(crypto.Keccak256([]byte(time.Now().String()))),
@@ -97,6 +99,7 @@ func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ([]byte, error
 		"timestamp":  big.NewInt(int64(order.Timestamp)),
 		"salt":       big.NewInt(int64(order.Salt)),
 		"maker":      order.Maker.String(),
+		"postOnly":   order.PostOnly,
 	}
 
 	typedData := apitypes.TypedData{
@@ -130,9 +133,9 @@ func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ([]byte, error
 		return nil, err
 	}
 
-	// if signature[64] < 27 {
-	// 	signature[64] += 27
-	// }
+	if signature[64] < 27 {
+		signature[64] += 27
+	}
 
 	fmt.Printf("Signature: %s\n", hexutil.Encode(signature))
 	// order.Signature = fmt.Sprintf("0x%s", hexutil.Encode(signature))

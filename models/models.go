@@ -1,8 +1,6 @@
 package models
 
-import (
-	"github.com/ethereum/go-ethereum/common"
-)
+import "github.com/ethereum/go-ethereum/common"
 
 type (
 	AssetPrice struct {
@@ -44,7 +42,8 @@ type (
 		Amount     int64          `json:"amount,string"`
 		Timestamp  int64          `json:"timestamp,string"`
 		Salt       int64          `json:"salt,string"`
-		Maker      common.Address `json:"maker"`
+		Maker      common.Address 		  `json:"maker"`
 		Signature  string         `json:"signature"`
+		PostOnly 	bool          `json:"post_only"`
 	}
 )

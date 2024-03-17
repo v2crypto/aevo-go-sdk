@@ -48,7 +48,7 @@ func getHeaders(path, method, body string) map[string]string {
 	return headers
 }
 
-func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ([]byte, error) {
+func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ( *models.CreateOrderRes, error) {
 	// construct the order
 	order.Timestamp = time.Now().Unix()
 	order.Salt = int64(generateSalt())
@@ -74,7 +74,6 @@ func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ([]byte, error
 			{Name: "salt", Type: "uint256"},
 			{Name: "instrument", Type: "uint256"},
 			{Name: "timestamp", Type: "uint256"},
-			// {Name: "postOnly", Type: "bool"},
 		},
 	}
 	// privateKeys, err := crypto.HexToECDSA(os.Getenv("SIGNING_KEY"))
@@ -101,7 +100,6 @@ func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ([]byte, error
 		"timestamp":  big.NewInt(int64(order.Timestamp)),
 		"salt":       big.NewInt(int64(order.Salt)),
 		"maker":      order.Maker.String(),
-		// "postOnly":   order.PostOnly,
 	}
 
 	typedData := apitypes.TypedData{
@@ -150,7 +148,7 @@ func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ([]byte, error
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(order)
+	fmt.Println(string(orderJSON))
 	url := fmt.Sprintf("%s/orders", c.baseUrl)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(orderJSON))
 	if err != nil {
@@ -170,7 +168,13 @@ func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ([]byte, error
 	if err != nil {
 		return nil, err
 	}
-	return body, nil
+
+	var orderRes models.CreateOrderRes
+	err = json.Unmarshal(body, &orderRes)
+	if err != nil {
+		return &models.CreateOrderRes{}, err
+	}
+	return &orderRes, nil
 }
 
 func (c *Client) CancelOrder(orderID string) ([]byte, error) {
@@ -218,8 +222,8 @@ func (c *Client) GetOrders() ([]byte, error) {
 }
 
 
-func (c *Client) MarketOrder(isBuy bool, instrument int, amount float64) ([]byte, error) {
-	var price string = "0"
+func (c *Client) MarketOrder(isBuy bool, instrument int, amount float64) (*models.CreateOrderRes, error) {
+	var price = "0"
 	if isBuy {
 		// 2**256 - 1
 		price = "115792089237316195423570985008687907853269984665640564039457584007913129639935"
@@ -229,5 +233,6 @@ func (c *Client) MarketOrder(isBuy bool, instrument int, amount float64) ([]byte
 		Instrument: instrument,
 		Amount: int64(amount * 1000000),
 		LimitPrice: price,
+		ReduceOnly: false,
 	})
 }

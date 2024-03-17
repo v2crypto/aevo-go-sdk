@@ -32,5 +32,5 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(string(body))
+	fmt.Println(body)
 }

@@ -91,10 +91,12 @@ func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ([]byte, error
 		// Salt:    hexutil.Encode(crypto.Keccak256([]byte(time.Now().String()))),
 		// VerifyingContract: crypto.PubkeyToAddress(privateKeys.PublicKey).Hex(),
 	}
+	var num big.Int
+	price, _ := num.SetString(order.LimitPrice, 10)
 	message := map[string]interface{}{
 		"isBuy":      order.IsBuy,
 		"instrument": big.NewInt(int64(order.Instrument)),
-		"limitPrice": big.NewInt(int64(order.LimitPrice)),
+		"limitPrice": price,
 		"amount":     big.NewInt(int64(order.Amount)),
 		"timestamp":  big.NewInt(int64(order.Timestamp)),
 		"salt":       big.NewInt(int64(order.Salt)),
@@ -213,4 +215,19 @@ func (c *Client) GetOrders() ([]byte, error) {
 		return nil, err
 	}
 	return body, nil
+}
+
+
+func (c *Client) MarketOrder(isBuy bool, instrument int, amount float64) ([]byte, error) {
+	var price string = "0"
+	if isBuy {
+		// 2**256 - 1
+		price = "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+	}
+	return c.CreateAndSignOrder(models.AevoSignedOrder{
+		IsBuy: isBuy,
+		Instrument: instrument,
+		Amount: int64(amount * 1000000),
+		LimitPrice: price,
+	})
 }

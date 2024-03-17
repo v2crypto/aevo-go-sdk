@@ -27,7 +27,7 @@ func main() {
 		Instrument: 2054,
 		IsBuy:      true,
 		Amount:     1,
-		LimitPrice: 2500,
+		LimitPrice: "2500",
 	})
 	if err != nil {
 		fmt.Println(err)

@@ -11,7 +11,6 @@ import (
 	"math/big"
 	"math/rand"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -29,9 +28,9 @@ func generateSalt() int {
 	return rand.Intn(900000) + 100000
 }
 
-func getHeaders(path, method, body string) map[string]string {
-	apiKey := os.Getenv("API_KEY")
-	apiSecret := os.Getenv("API_SECRET")
+func (c *Client) getHeaders(path, method, body string) map[string]string {
+	apiKey := c.apiKey
+	apiSecret := c.apiSecret
 	timestamp := strconv.FormatInt(time.Now().UnixNano(), 10)
 
 	message := fmt.Sprintf("%s,%s,%s,%s,%s", apiKey, timestamp, strings.ToUpper(method), path, body)
@@ -118,7 +117,7 @@ func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ( *models.Crea
 		return nil, err
 	}
 	// sign with key
-	signingKey := os.Getenv("SIGNING_KEY")
+	signingKey := c.signingKey
 	key, err := crypto.HexToECDSA(signingKey)
 	if err != nil {
 		return nil, err
@@ -155,7 +154,7 @@ func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ( *models.Crea
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	headers := getHeaders("/orders", "POST", string(orderJSON))
+	headers := c.getHeaders("/orders", "POST", string(orderJSON))
 	for k, v := range headers {
 		req.Header.Add(k, v)
 	}
@@ -183,7 +182,7 @@ func (c *Client) CancelOrder(orderID string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	headers := getHeaders("/"+orderID, "DELETE", "")
+	headers := c.getHeaders("/"+orderID, "DELETE", "")
 	for k, v := range headers {
 		req.Header.Add(k, v)
 	}
@@ -205,7 +204,7 @@ func (c *Client) GetOrders() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	headers := getHeaders("/orders", "GET", "")
+	headers := c.getHeaders("/orders", "GET", "")
 	for k, v := range headers {
 		req.Header.Add(k, v)
 	}

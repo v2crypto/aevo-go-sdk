@@ -76,4 +76,12 @@ type (
 		AvgPrice         string `json:"avg_price"`
 		Error 			 string `json:"error"`
 	}
+
+	ClientOption struct {
+		ChainType  string
+		Address string
+		ApiKey string
+		ApiSecret string
+		SigningKey string
+	}
 )

@@ -7,6 +7,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
+	"github.com/v2crypto/aevo-go-sdk/models"
 )
 
 func TestAevoOrder(t *testing.T) {
@@ -15,7 +16,13 @@ func TestAevoOrder(t *testing.T) {
 		panic(err)  
 	}
 
-	client, err := NewClient("mainnet", os.Getenv("PRIVATE_KEY"))
+	client, err := NewClient(models.ClientOption{
+		ChainType: "mainnet",
+		Address: os.Getenv("ADDRESS"),
+		ApiKey: os.Getenv("API_KEY"),
+		ApiSecret: os.Getenv("API_SECRET"),
+		SigningKey: os.Getenv("SIGNING_KEY"),
+	})
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -84,4 +84,73 @@ type (
 		ApiSecret string
 		SigningKey string
 	}
+
+	Account struct {
+		Error 		string `json:"error"`
+		Account     string `json:"account"`
+		Username    string `json:"username"`
+		AccountType string `json:"account_type"`
+		Portfolio   bool   `json:"portfolio"`
+		Equity      string `json:"equity"`
+		Balance     string `json:"balance"`
+		Credit      string `json:"credit"`
+		Credited    bool   `json:"credited"`
+		Collaterals []struct {
+			CollateralAsset        string `json:"collateral_asset"`
+			Balance                string `json:"balance"`
+			AvailableBalance       string `json:"available_balance"`
+			WithdrawableBalance    string `json:"withdrawable_balance"`
+			MarginValue            string `json:"margin_value"`
+			CollateralValue        string `json:"collateral_value"`
+			CollateralYieldBearing bool   `json:"collateral_yield_bearing"`
+		} `json:"collaterals"`
+		AvailableBalance  string  `json:"available_balance"`
+		InitialMargin     string  `json:"initial_margin"`
+		MaintenanceMargin string  `json:"maintenance_margin"`
+		EmailAddress      string  `json:"email_address"`
+		InLiquidation     bool    `json:"in_liquidation"`
+		ReferralBonus     float64 `json:"referral_bonus"`
+		RefereeDiscount   float64 `json:"referee_discount"`
+		HasBeenReferred   bool    `json:"has_been_referred"`
+		IntercomHash      string  `json:"intercom_hash"`
+		Positions         []struct {
+			Asset             string `json:"asset"`
+			InstrumentID      string `json:"instrument_id"`
+			InstrumentName    string `json:"instrument_name"`
+			InstrumentType    string `json:"instrument_type"`
+			Amount            string `json:"amount"`
+			Side              string `json:"side"`
+			MarkPrice         string `json:"mark_price"`
+			AvgEntryPrice     string `json:"avg_entry_price"`
+			UnrealizedPnl     string `json:"unrealized_pnl"`
+			MaintenanceMargin string `json:"maintenance_margin"`
+			LiquidationPrice  string `json:"liquidation_price"`
+			MarginType        string `json:"margin_type"`
+			Triggers          struct {
+			} `json:"triggers"`
+		} `json:"positions"`
+		SigningKeys []struct {
+			SigningKey       string `json:"signing_key"`
+			Expiry           string `json:"expiry"`
+			CreatedTimestamp string `json:"created_timestamp"`
+		} `json:"signing_keys"`
+		APIKeys []struct {
+			Name             string `json:"name,omitempty"`
+			APIKey           string `json:"api_key"`
+			ReadOnly         bool   `json:"read_only"`
+			CreatedTimestamp string `json:"created_timestamp"`
+		} `json:"api_keys"`
+		FeeStructures []struct {
+			Asset          string `json:"asset"`
+			InstrumentType string `json:"instrument_type"`
+			TakerFee       string `json:"taker_fee"`
+			MakerFee       string `json:"maker_fee"`
+		} `json:"fee_structures"`
+		Leverages []struct {
+			InstrumentID string `json:"instrument_id"`
+			Leverage     string `json:"leverage"`
+			MarginType   string `json:"margin_type"`
+		} `json:"leverages"`
+		Permissions []any `json:"permissions"`
+	}
 )

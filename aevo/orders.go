@@ -74,7 +74,7 @@ func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ([]byte, error
 			{Name: "salt", Type: "uint256"},
 			{Name: "instrument", Type: "uint256"},
 			{Name: "timestamp", Type: "uint256"},
-			{Name: "postOnly", Type: "bool"},
+			// {Name: "postOnly", Type: "bool"},
 		},
 	}
 	// privateKeys, err := crypto.HexToECDSA(os.Getenv("SIGNING_KEY"))
@@ -99,7 +99,7 @@ func (c *Client) CreateAndSignOrder(order models.AevoSignedOrder) ([]byte, error
 		"timestamp":  big.NewInt(int64(order.Timestamp)),
 		"salt":       big.NewInt(int64(order.Salt)),
 		"maker":      order.Maker.String(),
-		"postOnly":   order.PostOnly,
+		// "postOnly":   order.PostOnly,
 	}
 
 	typedData := apitypes.TypedData{

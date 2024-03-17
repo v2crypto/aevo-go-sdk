@@ -260,3 +260,29 @@ func (c *Client) GetInstrumentByName(instrument string) ([]byte, error) {
 	}
 	return body, nil
 }
+
+
+// GetOrderBook returns the order book information for the given instrument
+func (c *Client) GetOrderBook(instrument string) (*models.OrderBook, error) {
+	url := fmt.Sprintf("%sorderbook?instrument_name=%s", c.baseUrl, instrument)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("accept", "application/json")
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+	var orderBook models.OrderBook
+	err = json.Unmarshal(body, &orderBook)
+	if err != nil {
+		return &models.OrderBook{}, err
+	}
+	return &orderBook, nil
+}

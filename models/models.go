@@ -46,4 +46,9 @@ type (
 		Signature  string         `json:"signature"`
 		PostOnly 	bool          `json:"post_only"`
 	}
+
+	OrderBook struct {
+		Bids [][]string
+		Asks [][]string
+	}
 )

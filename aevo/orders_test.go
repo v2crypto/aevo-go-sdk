@@ -27,16 +27,37 @@ func TestAevoOrder(t *testing.T) {
 		fmt.Println(err)
 	}
 
-	res, err := client.GetInstrumentByName("ETH-PERP")
-	assert.Nil(t, err)
-	fmt.Println(string(res))
+	t.Run("GetInstrumentByName", func(t *testing.T) {
+		res, err := client.GetInstrumentByName("ETH-PERP")
+		assert.Nil(t, err)
+		fmt.Println(string(res))
+	})
 
-	// orderBook, err := client.GetOrderBook("ETH-PERP")
-	// assert.Nil(t, err)
-	// fmt.Println(orderBook)
 
-	orderRes, err := client.MarketOrder(false, 1, 0.01)
+	t.Run("GetOrderBook", func(t *testing.T) {
+		orderBook, err := client.GetOrderBook("ETH-PERP")
+		assert.Nil(t, err)
+		fmt.Println(orderBook)
+	})
 
-	assert.Nil(t, err)
-	fmt.Println(orderRes)
+	t.Run("MarketOrder", func(t *testing.T) {
+		res, err := client.MarketOrder(false, 1, 0.01)
+		assert.Nil(t, err)
+		fmt.Println(res)
+	})
+
+	t.Run("GetTradeHistory", func(t *testing.T) {
+		res, err := client.GetTradeHistory(models.TradeHistoryReq{
+			StartTime: 0,
+			InstrumentType: "PERPETUAL",
+			Limit: 5,
+			TradeTypes: "trade_types=trade&trade_types=liquidation&trade_types=settlement",
+		})
+		assert.Nil(t, err)
+		fmt.Println(res)
+	})
+
+
+
+
 }

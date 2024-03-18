@@ -153,4 +153,44 @@ type (
 		} `json:"leverages"`
 		Permissions []any `json:"permissions"`
 	}
+
+	TradeHistoryReq struct {
+		StartTime int64
+		Asset string
+		EndTime int64
+		TradeTypes string
+		InstrumentType string
+		OptionType string
+		Limit int64
+		Offset int64
+	}
+
+	TradeHistoryRes struct {
+	Count        string `json:"count"`
+	TradeHistory []struct {
+		TradeID          string `json:"trade_id"`
+		TradeType        string `json:"trade_type"`
+		InstrumentID     string `json:"instrument_id"`
+		InstrumentName   string `json:"instrument_name"`
+		InstrumentType   string `json:"instrument_type"`
+		Asset            string `json:"asset"`
+		SpotPrice        string `json:"spot_price,omitempty"`
+		Account          string `json:"account"`
+		Amount           string `json:"amount"`
+		Side             string `json:"side"`
+		Fees             string `json:"fees"`
+		CreatedTimestamp string `json:"created_timestamp"`
+		Pnl              string `json:"pnl"`
+		Price            string `json:"price,omitempty"`
+		OrderID          string `json:"order_id,omitempty"`
+		OrderType        string `json:"order_type,omitempty"`
+		AggOrderID       string `json:"agg_order_id,omitempty"`
+		TradeStatus      string `json:"trade_status,omitempty"`
+		Liquidity        string `json:"liquidity,omitempty"`
+		TakerTradeID     string `json:"taker_trade_id,omitempty"`
+		FarmBoost        string `json:"farm_boost,omitempty"`
+		MarkPrice        string `json:"mark_price,omitempty"`
+		FeeRate          string `json:"fee_rate,omitempty"`
+	} `json:"trade_history"`
+}
 )
